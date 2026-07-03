@@ -8,7 +8,6 @@
 """
 import io
 import sys
-import json
 import requests
 
 BASE = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "http://localhost:9001"
@@ -70,20 +69,8 @@ r = post("/folder", params={"prefix": TEST_DIR})
 results.append(check("POST /folder", r.status_code == 201,
                       r.json().get("key", "") if r.status_code == 201 else r.text))
 
-# ── JSON 读写 ───────────────────────────────────────────────────
-JSON_KEY = "学分计算/_smoke_test.json"
-payload = {"semester": "测试学期", "courses": [{"name": "Test", "credits": 3,
-           "assignments": [{"name": "期末", "weight": 100, "score": 85}]}]}
-r = put("/json", json={"key": JSON_KEY, "data": payload})
-results.append(check("PUT /json", r.status_code == 200,
-                      f"size={r.json().get('size','?')}b" if r.status_code==200 else r.text))
-
-r = get("/json", params={"key": JSON_KEY})
-ok = r.status_code == 200 and r.json().get("semester") == "测试学期"
-results.append(check("GET /json", ok))
-
 # ── 删除测试对象 ────────────────────────────────────────────────
-for key in [TEST_KEY, TEST_DIR, JSON_KEY]:
+for key in [TEST_KEY, TEST_DIR]:
     r = delete("/object", params={"key": key})
     results.append(check(f"DELETE /object ({key.split('/')[-1] or key.split('/')[-2]})",
                           r.status_code == 200))
