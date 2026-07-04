@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - "9001:9001"
+      - "8080:8080"
     environment:
       # ── 腾讯云 COS（必填） ──────────────────────────────────────────
       - COS_SECRET_ID=${COS_SECRET_ID}
@@ -19,11 +19,11 @@ services:
       - LLM_API_STYLE=${LLM_API_STYLE:-anthropic}
       # ── 服务配置 ───────────────────────────────────────────────────
       - API_TOKEN=${API_TOKEN:-}
-      - PORT=${PORT:-9001}
+      - PORT=${PORT:-8080}
     # 不再需要本地 data/ 卷，所有持久数据存储在 COS
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9001/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
       interval: 30s
       timeout: 5s
       retries: 3

@@ -16,7 +16,7 @@
     LLM_API_STYLE      anthropic | openai  （默认 anthropic）
     LLM_MODEL          模型名称
     PRESIGN_EXPIRE     预签名有效期（秒，默认 3600）
-    PORT               监听端口（默认 9001）
+    PORT               监听端口（默认 8080）
 """
 
 import io
@@ -257,5 +257,5 @@ def ai_analyze(body: AnalyzeRequest, _: None = Depends(check_auth)):
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.environ.get("PORT", 9001))
+    port = int(os.environ.get("PORT", 8080))
     uvicorn.run("index:app", host="0.0.0.0", port=port, reload=False)

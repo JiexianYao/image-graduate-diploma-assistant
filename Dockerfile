@@ -9,6 +9,6 @@ COPY . .
 
 RUN mkdir -p data/docs data/exam data/admin data/metadata
 
-EXPOSE 9001
+EXPOSE 8080
 
 CMD ["gunicorn", "index:app", "--config", "gunicorn.conf.py"]
