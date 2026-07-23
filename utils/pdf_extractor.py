@@ -38,6 +38,48 @@ def extract_text(file_path: Path, max_chars: int = _MAX_CHARS) -> str:
         return ""
 
 
+def extract_text_from_data(data: bytes, filename: str, max_chars: int = _MAX_CHARS) -> str:
+    """
+    从内存数据中提取纯文本。
+    支持 PDF、图片、JSON 和其他文本格式。
+    返回字符串，失败时返回空字符串（不抛出异常）。
+    """
+    try:
+        import fitz  # pymupdf
+    except ImportError:
+        return ""
+
+    suffix = Path(filename).suffix.lower()
+
+    try:
+        if suffix in _SUPPORTED_PDF:
+            # 从内存数据提取 PDF 文本
+            doc = fitz.open(stream=data, filetype="pdf")
+            parts = []
+            total = 0
+            for page in doc:
+                text = page.get_text("text")
+                if total + len(text) > max_chars:
+                    parts.append(text[: max_chars - total])
+                    break
+                parts.append(text)
+                total += len(text)
+            doc.close()
+            return "\n".join(parts).strip()
+        elif suffix in _SUPPORTED_IMAGE:
+            # 从内存数据提取图片文本（OCR）
+            doc = fitz.open(stream=data, filetype=suffix.lstrip("."))
+            page = doc[0]
+            tp = page.get_textpage_ocr(flags=3, language="chi_sim+eng")
+            text = page.get_text(textpage=tp)
+            doc.close()
+            return text[:max_chars].strip()
+        else:
+            return ""
+    except Exception:
+        return ""
+
+
 def _extract_pdf(path: Path, fitz, max_chars: int) -> str:
     doc = fitz.open(str(path))
     parts = []

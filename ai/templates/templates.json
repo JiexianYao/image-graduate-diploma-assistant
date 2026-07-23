@@ -1,0 +1,32 @@
+{
+  "templates": [
+    {
+      "id": "course_analysis",
+      "name": "课程分析",
+      "description": "分析课程的评分构成、时间节点和分组方法",
+      "default_prompt": "分析课程的分数构成、时间节点和分组方法",
+      "system_prompt_file": "course_analysis.txt"
+    },
+    {
+      "id": "exam_review",
+      "name": "期末复习",
+      "description": "整理复习材料，提取重点内容",
+      "default_prompt": "帮我整理期末复习重点",
+      "system_prompt_file": "exam_review.txt"
+    },
+    {
+      "id": "policy_summary",
+      "name": "制度总结",
+      "description": "理解和总结学校制度文档",
+      "default_prompt": "总结这份制度文档的要点",
+      "system_prompt_file": "policy_summary.txt"
+    },
+    {
+      "id": "general_summary",
+      "name": "通用总结",
+      "description": "通用文档分析和总结",
+      "default_prompt": "请用中文对以下材料做简洁的要点总结",
+      "system_prompt_file": "general_summary.txt"
+    }
+  ]
+}
